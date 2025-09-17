@@ -36,6 +36,7 @@ export default function Home() {
             </p>
           </div>
           <SignIn 
+            routing="hash"
             appearance={{
               elements: {
                 formButtonPrimary: 'bg-indigo-600 hover:bg-indigo-700 text-sm normal-case',

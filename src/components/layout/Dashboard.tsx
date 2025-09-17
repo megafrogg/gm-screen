@@ -49,7 +49,7 @@ export default function Dashboard({ children }: DashboardProps) {
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <span className="text-sm text-gray-700 mr-4">
-                  {user?.emailAddresses[0]?.emailAddress}
+                  {user?.emailAddresses?.[0]?.emailAddress || 'User'}
                 </span>
                 <UserButton 
                   appearance={{

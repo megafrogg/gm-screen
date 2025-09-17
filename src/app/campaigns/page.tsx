@@ -20,16 +20,44 @@ export default function CampaignsPage() {
 
   const fetchCampaigns = useCallback(async () => {
     try {
+      console.log('Fetching campaigns for user:', user?.id)
+      console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
+      
+      // First, test basic connection
+      const { data: testData, error: testError } = await supabase
+        .from('profiles')
+        .select('count')
+        .limit(1)
+      
+      if (testError) {
+        console.error('Supabase connection test failed:', testError)
+        throw new Error(`Supabase connection failed: ${testError.message}`)
+      }
+      
+      console.log('Supabase connection test passed')
+      
       const { data, error } = await supabase
         .from('campaigns')
         .select('*')
         .eq('user_id', user?.id)
         .order('created_at', { ascending: false })
 
-      if (error) throw error
+      if (error) {
+        console.error('Supabase error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        })
+        throw error
+      }
+      
+      console.log('Campaigns fetched successfully:', data)
       setCampaigns(data || [])
     } catch (error) {
       console.error('Error fetching campaigns:', error)
+      // Show a more helpful error message
+      alert(`Database error: ${error instanceof Error ? error.message : 'Unknown error'}. Please check if you've run the database schema.`)
     } finally {
       setLoading(false)
     }
